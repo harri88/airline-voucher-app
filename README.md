@@ -11,7 +11,7 @@ This project consists of a backend service and a frontend application, both cont
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone git@github.com:harri88/airline-voucher-app.git
 cd airline-voucher-app
 ```
 
