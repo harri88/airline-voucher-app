@@ -1,0 +1,127 @@
+basePath: /
+definitions:
+  dto.CheckRequest:
+    properties:
+      date:
+        description: Expects YYYY-MM-DD
+        type: string
+      flightNumber:
+        type: string
+    required:
+    - date
+    - flightNumber
+    type: object
+  dto.CheckResponse:
+    properties:
+      exists:
+        type: boolean
+    type: object
+  dto.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  dto.GenerateRequest:
+    properties:
+      aircraft:
+        description: '"ATR", "Airbus 320", etc.'
+        type: string
+      date:
+        description: Expects YYYY-MM-DD
+        type: string
+      flightNumber:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    required:
+    - aircraft
+    - date
+    - flightNumber
+    - id
+    - name
+    type: object
+  dto.GenerateResponse:
+    properties:
+      seats:
+        items:
+          type: string
+        type: array
+      success:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for generating airline voucher seats.
+  title: Airline Voucher API
+  version: "1.0"
+paths:
+  /api/check:
+    post:
+      consumes:
+      - application/json
+      description: Checks if vouchers have already been assigned to a specific flight
+        on a specific date.
+      parameters:
+      - description: Flight Check Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CheckRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CheckResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Check if vouchers exist for a flight
+      tags:
+      - Vouchers
+  /api/generate:
+    post:
+      consumes:
+      - application/json
+      description: Generates 3 unique random voucher seats for a flight, fails if
+        they already exist.
+      parameters:
+      - description: Voucher Generation Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GenerateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.GenerateResponse'
+        "400":
+          description: Bad Request or Invalid Aircraft
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "409":
+          description: Vouchers already generated
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Generate 3 new voucher seats
+      tags:
+      - Vouchers
+swagger: "2.0"

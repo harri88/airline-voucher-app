@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: airline-backend
+    ports:
+      - "8080:8080" # Expose backend port for direct access (e.g., Swagger)
+    volumes:
+      - backend-data:/data
+    environment:
+      - DB_PATH=/data/vouchers.db # Tell Go to use the volume for the DB
+      - PORT=8080
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: airline-frontend
+    ports:
+      - "3000:80" # User accesses the app on http://localhost:3000
+    depends_on:
+      - backend
+
+volumes:
+  backend-data: # This volume persists the SQLite database file
