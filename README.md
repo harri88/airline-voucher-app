@@ -33,7 +33,7 @@ docker-compose down
 ## Services
 
 - **Frontend**: React application
-- **Backend**: Spring Boot API service
+- **Backend**: Golang API service
 
 ## Environment Variables
 
